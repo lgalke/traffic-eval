@@ -59,6 +59,9 @@ def main():
         x = np.arange(len(y))
 
         plt.scatter(x, y)
+
+    plt.xlabel("Road segments")
+    plt.ylabel("#routes on segment")
     plt.show()
 
 

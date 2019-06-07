@@ -63,6 +63,8 @@ def main():
         x = np.arange(len(y))
 
         plt.scatter(x, y)
+    plt.xlabel("Drivers")
+    plt.ylabel("Time in seconds")
     plt.show()
 
 
