@@ -32,6 +32,8 @@ def main():
     parser.add_argument("path",
                         default='./costFunctions',
                         help="Path to directory with cost functions")
+    parser.add_argument("--unweighted", default=False, action='store_true',
+                        help="Compute unweighted average across mean costs per edge")
 
     args = parser.parse_args()
 
@@ -68,11 +70,12 @@ def main():
                 cost_functions[edge_id][int(load)] = mean 
 
                 # Aggregate for global cost function
-                # load_costs[load] += mean * count
-                # load_counts[load] += count
-
-                load_costs[load] += mean 
-                load_counts[load] += 1
+                if args.unweighted:
+                    load_costs[load] += mean 
+                    load_counts[load] += 1
+                else:
+                    load_costs[load] += mean * count
+                    load_counts[load] += count
 
 
     # Compute weighted average of costs wrt accumulated counts
