@@ -22,11 +22,15 @@ import matplotlib.pyplot as plt
 def parse_file(path, sort=True):
     edge_counts = []
     with open(path, 'r') as file:
-        for line in file:
+        for i, line in enumerate(file):
             line = line.strip()
             if line[0] == '#':
                 continue
-            edge_id, count = line.split('=')
+            try:
+                edge_id, count = line.split('=')
+            except ValueError:
+                print("Parse error in line", i+1, "of file", file.name)
+                continue
             edge_counts.append((int(edge_id), int(count)))
 
     return edge_counts
@@ -43,6 +47,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("usedEdges", nargs='+', help="Path to usedEdges*.txt file")
+    parser.add_argument("--legend", nargs='+', default=None, help="Specify legend *IN SAME ORDER* as input files")
     args = parser.parse_args()
 
     plt.figure()
@@ -53,12 +58,14 @@ def main():
 
         y = np.array(sorted(y, reverse=True))
         S = entropy(y, base=2)
-
         print("H ('{}') = {}".format(path, S))
 
         x = np.arange(len(y))
 
-        plt.scatter(x, y)
+        plt.scatter(x, y, marker='.')
+
+    if args.legend:
+        plt.legend(args.legend)
 
     plt.xlabel("Road segments")
     plt.ylabel("#routes on segment")

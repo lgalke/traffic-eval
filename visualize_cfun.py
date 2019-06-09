@@ -34,6 +34,7 @@ def main():
                         help="Path to directory with cost functions")
     parser.add_argument("--unweighted", default=False, action='store_true',
                         help="Compute unweighted average across mean costs per edge")
+    parser.add_argument("--max-load", default=None, type=int, help="Specify max load to plot")
 
     args = parser.parse_args()
 
@@ -65,6 +66,9 @@ def main():
 
                 # Restore types
                 load, mean, count = int(load), float(mean), int(count)
+
+                if args.max_load and load > args.max_load:
+                    continue
 
                 # Store in edge cost function
                 cost_functions[edge_id][int(load)] = mean 
@@ -98,11 +102,11 @@ def main():
 
     # sort by key and unzip
     x, y = zip(*sorted(global_cost_fn.items(), key=itemgetter(0)))
-    plt.plot(x,y, c='b', linewidth=3.0)
+    plt.plot(x,y, c='b', linewidth=5.0)
 
 
     print("#costfunctions =", len(cost_functions))
-    plt.show()
+    plt.savefig("costfunctions.png")
 
 
 
