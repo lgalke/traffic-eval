@@ -52,13 +52,15 @@ def main():
 
     plt.figure()
 
-    for path in args.usedEdges: 
+    for i, path in enumerate(args.usedEdges): 
         edge_counts = parse_file(path)
         __edge_ids, y = list(zip(*edge_counts))
 
+        desc = args.legend[i] if args.legend else path
+
         y = np.array(sorted(y, reverse=True))
         S = entropy(y, base=2)
-        print("H ('{}') = {}".format(path, S))
+        print("H ('{}') = {}, N={}".format(desc, S, y.size))
 
         x = np.arange(len(y))
 
